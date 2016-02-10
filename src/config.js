@@ -1,5 +1,6 @@
 export default {
-  baseUrl: 'http://localhost:8080/contract-live/',
+  baseUrl: '/api/',
   loginUrl: 'auth',
+  cmdUrl: 'cmd',
   tokenName: 'JSESSIONID'
 };

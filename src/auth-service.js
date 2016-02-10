@@ -23,7 +23,20 @@ export default class AuthService {
     });
 
     this.http = http;
-    this.session = JSON.parse(Cookie.get(config.tokenName) || null);
+    this.session = Cookie.get(config.tokenName) || null;
+
+    if (this.session) {
+      this.http
+        .fetch(config.baseUrl + config.cmdUrl, {
+          method: 'post',
+          body: json({
+            cmd: "user:init"
+          })
+        })
+        .then((response) => {
+          debugger;
+        });
+    }
   }
 
   login(username, password) {
@@ -35,9 +48,11 @@ export default class AuthService {
           password
         })
       })
-      .then((response) => response.content)
+      .then((response) => {
+        return response.url.split('=')[1];
+      })
       .then((session) => {
-        Cookie.set(config.tokenName, json(session));
+        Cookie.set(config.tokenName, session);
         this.session = session;
       });
   }
