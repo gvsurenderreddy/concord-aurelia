@@ -3,11 +3,10 @@ import {Redirect} from 'aurelia-router';
 import {I18N} from 'aurelia-i18n';
 import AuthService from 'auth-service';
 
-@inject(I18N, AuthService)
+@inject(I18N)
 export class App {
-  constructor(i18n, auth) {
+  constructor(i18n) {
     this.i18n = i18n;
-    this.auth = auth;
   }
 
   configureRouter(config, router) {
@@ -23,12 +22,16 @@ export class App {
   }
 }
 
+@inject(AuthService)
 class AuthorizeStep {
+  constructor(auth) {
+    this.auth = auth;
+  }
+
   run(navigationInstruction, next) {
     if (navigationInstruction.getAllInstructions().some(i => i.config.auth)) {
       var isLoggedIn = this.auth.isAuthenticated();
       if (!isLoggedIn) {
-        debugger;
         return next.cancel(new Redirect('login'));
       }
     }

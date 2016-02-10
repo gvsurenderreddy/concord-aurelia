@@ -1,5 +1,5 @@
 import {inject} from 'aurelia-framework';
-import {HttpClient} from 'aurelia-fetch-client';
+import {HttpClient, json} from 'aurelia-fetch-client';
 import {Cookie} from './cookie';
 import config from 'config';
 
@@ -15,6 +15,10 @@ export default class AuthService {
     http.configure(config => {
       config
         .useStandardConfiguration()
+        .withDefaults({
+          credentials: 'same-origin',
+          headers: {"content-type" : "application/json"}
+        })
         .withBaseUrl(config.baseUrl);
     });
 
@@ -25,16 +29,15 @@ export default class AuthService {
   login(username, password) {
     this.http
       .fetch(config.baseUrl + config.loginUrl, {
-        headers: {"content-type" : "application/json"},
-        method: 'POST',
-        body: JSON.stringify({
+        method: 'post',
+        body: json({
           username,
           password
         })
       })
       .then((response) => response.content)
       .then((session) => {
-        Cookie.set(config.tokenName, JSON.stringify(session));
+        Cookie.set(config.tokenName, json(session));
         this.session = session;
       });
   }

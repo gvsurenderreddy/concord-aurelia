@@ -1,10 +1,7 @@
-import 'bootstrap';
-
 export function configure(aurelia) {
   aurelia.use
     .standardConfiguration()
     .developmentLogging()
-    .plugin('aurelia-cookie')
     .plugin('aurelia-i18n', (instance) => {
       instance.setup({
         resGetPath: 'locale/__lng__/__ns__.json',

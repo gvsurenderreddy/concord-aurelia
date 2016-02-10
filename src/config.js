@@ -1,5 +1,5 @@
 export default {
-  baseUrl: 'https://ic.concord.camp/',
+  baseUrl: 'http://localhost:8080/contract-live/',
   loginUrl: 'auth',
   tokenName: 'JSESSIONID'
 };
