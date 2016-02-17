@@ -16,7 +16,20 @@ gulp.task('serve', ['build'], function(done) {
     port: 9000,
     server: {
       baseDir: ['.'],
-      middleware: [proxy(proxyOptions), function(req, res, next) {
+      middleware: [function(req, res, next) {
+        if (req.url === '/api/auth') {
+          res.oldWriteHead = res.writeHead;
+          res.writeHead = function(statusCode, headers) {
+            if (headers) {
+              headers['set-cookie'] = headers['set-cookie'].map(function(item) {
+                return item.replace('Path=/contract-live/', 'Path=/');
+              });
+            }
+            res.oldWriteHead(statusCode, headers);
+          };
+        }
+        next();
+      }, proxy(proxyOptions), function(req, res, next) {
         res.setHeader('Access-Control-Allow-Origin', '*');
         next();
       }]

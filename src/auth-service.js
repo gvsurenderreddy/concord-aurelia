@@ -24,19 +24,6 @@ export default class AuthService {
 
     this.http = http;
     this.session = Cookie.get(config.tokenName) || null;
-
-    if (this.session) {
-      this.http
-        .fetch(config.baseUrl + config.cmdUrl, {
-          method: 'post',
-          body: json({
-            cmd: "user:init"
-          })
-        })
-        .then((response) => {
-          debugger;
-        });
-    }
   }
 
   login(username, password) {
@@ -49,11 +36,7 @@ export default class AuthService {
         })
       })
       .then((response) => {
-        return response.url.split('=')[1];
-      })
-      .then((session) => {
-        Cookie.set(config.tokenName, session);
-        this.session = session;
+        Cookie.set(config.tokenName, true);
       });
   }
 
